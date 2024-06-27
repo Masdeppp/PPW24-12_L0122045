@@ -44,6 +44,30 @@ class BookController extends Controller
                      ->with('success', 'Book created successfully.');
     }
 
+    public function update(Request $request, Book $book)
+    {
+    $request->validate([
+        'title' => 'required',
+        'author' => 'required',
+        'year' => 'required|integer',
+        'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:4096',
+    ]);
+
+    $input = $request->all();
+
+    if ($image = $request->file('image')) {
+        $destinationPath = 'images/';
+        $profileImage = date('YmdHis') . "." . $image->getClientOriginalExtension();
+        $image->move($destinationPath, $profileImage);
+        $input['image'] = "$profileImage";
+    }
+
+    $book->update($input);
+
+    return redirect()->route('books.index')
+                     ->with('success', 'Book updated successfully.');
+    }
+
     
     public function destroy(Book $book)
     {
@@ -55,6 +79,11 @@ class BookController extends Controller
     public function __construct()
     {
     $this->middleware('auth');
+    }
+    
+    public function edit(Book $book)
+    {
+    return view('books.edit', compact('book'));
     }
 
 

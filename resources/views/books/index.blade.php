@@ -25,6 +25,8 @@
             </div>
         @endif
 
+        <a href="{{ route('welcome') }}" class="btn btn-primary mb-3">Back</a>
+
         <table class="table table-bordered">
             <thead>
                 <tr>
@@ -52,6 +54,7 @@
                         </td>
                         <td>
                             <form action="{{ route('books.destroy', $book->id) }}" method="POST">
+                            <a class="btn btn-primary" href="{{ route('books.edit', $book->id) }}">Edit</a>
                                 @csrf
                                 @method('DELETE')
 
